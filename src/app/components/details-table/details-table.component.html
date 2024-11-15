@@ -1,0 +1,60 @@
+<div class="flex flex-col justify-center items-center shadow-custom p-4 pt-6 sm:pt-4 rounded-lg bg-white mb-6 relative">
+	<fuse-card #fuseCard
+			   class="flex flex-col rounded-none border-none shadow-none w-full lg:w-3/5 md:w-4/5 sm:w-11/12">
+		<div class="flex justify-between items-center mb-2">
+			<p class="text-md">Общий процент заполненности</p>
+			<h4 class="text-xl font-bold">78%</h4>
+		</div>
+		<mat-progress-bar mode="determinate" value="78" class="rounded-xl h-[8px]"></mat-progress-bar>
+		<div class="flex justify-between items-center mt-2">
+			<button class="text-md w-30 flex justify-around items-center gap-2 border rounded-md py-1.5 px-2 border-blue-400 text-blue-400 transition-all {{fuseCard.expanded ? 'bg-blue-500 text-white' : ''}}"
+					(click)="fuseCard.expanded = !fuseCard.expanded"
+			>
+				{{ !fuseCard.expanded ? 'Подробнее' : 'Скрыть' }}
+				<mat-icon class="icon-size-4 text-blue-400"
+						  *ngIf="!fuseCard.expanded"
+						  [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
+				<mat-icon class="icon-size-4 text-white"
+						  *ngIf="fuseCard.expanded"
+						  [svgIcon]="'heroicons_outline:chevron-up'"></mat-icon>
+			</button>
+			<div class="flex flex-col sm:flex-row gap-1 md:gap-2 items-center">
+				<p class="text-red-600 font-semibold text-md">Не подписано</p>
+				<p class="text-gray-400 text-sm">Последнее изменение: 14.11.2023</p>
+				<div class="rounded-3xl px-3 py-0.5 text-sm bg-green-600 text-white">Функционирует</div>
+			</div>
+		</div>
+		<!-- Details -->
+		<ng-container fuseCardExpansion>
+			<div class="w-full">
+				<div class="rounded-2xl flex flex-col items-end w-full  mt-4">
+					<table mat-table [dataSource]="dataSource" class="w-full shadow-none mat-elevation-z8 border-zinc-300 border">
+
+						<ng-container matColumnDef="chapter">
+							<th mat-header-cell class="text-sm select-none" *matHeaderCellDef>Раздел</th>
+							<td mat-cell *matCellDef="let element" class=""> {{ element.chapter }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="lastChange">
+							<th mat-header-cell class="text-sm select-none text-center" *matHeaderCellDef>Последнее изменение</th>
+							<td mat-cell *matCellDef="let element" class="text-center"> {{ element.lastChange }}</td>
+						</ng-container>
+
+						<ng-container matColumnDef="occupancyStatistics">
+							<th mat-header-cell class="text-sm select-none text-center" *matHeaderCellDef>Статистика заполненности</th>
+							<td mat-cell *matCellDef="let element" class="text-center h-[40px] flex justify-end items-center gap-3">
+								<mat-progress-bar mode="determinate" [value]="element.occupancyStatistics"
+												  class="rounded-xl w-4/6 h-[8px]"></mat-progress-bar>
+								<p class="min-w-[35px]">{{ element.occupancyStatistics }}%</p>
+							</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="displayedColumns" class=""></tr>
+						<tr mat-row *matRowDef="let row; columns: displayedColumns;" class="odd:bg-neutral-100 h-[40px]"></tr>
+					</table>
+				</div>
+			</div>
+		</ng-container>
+	</fuse-card>
+	<mat-icon svgIcon="close"
+			  class="absolute right-2 top-2 icon-size-4 md:icon-size-5 cursor-pointer"></mat-icon>
+</div>
