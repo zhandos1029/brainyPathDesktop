@@ -1,5 +1,7 @@
 {
     "name": "brainyPathDesktop",
+    "description": "Desktop application for BrainyPath",
+    "author": "brainyPathDesktop",
     "version": "15.0.0",
     "main": "main.js",
     "private": true,
@@ -9,8 +11,45 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "lint": "ng lint",
-        "electron": "ng build --base-href ./ && electron ."
+        "electron": "ng build --configuration production --base-href ./ && electron .",
+        "dist:electron": "ng build --configuration production --base-href ./ && electron-builder",
+        "dist:win": "npm run dist:electron -- --win",
+        "dist:mac": "npm run dist:electron -- --mac",
+        "dist:linux": "npm run dist:electron -- --linux"
+    },
+    "build": {
+        "appId": "brainyPathDesktop",
+        "productName": "brainyPathDesktop",
+        "files": [
+            "dist/",
+            "main.js"
+        ],
+        "directories": {
+            "output": "release"
+        },
+        "mac": {
+            "target": [
+                "dmg",
+                "zip"
+            ]
+        },
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ]
+        },
+        "linux": {
+            "target": [
+                "AppImage",
+                "deb"
+            ]
+        }
     },
     "dependencies": {
         "@angular/animations": "14.0.0",
@@ -27,6 +66,7 @@
         "@ngneat/transloco": "4.0.0",
         "apexcharts": "3.35.3",
         "crypto-js": "3.3.0",
+        "express": "^4.21.1",
         "highlight.js": "11.5.1",
         "lodash-es": "4.17.21",
         "moment": "2.29.3",
@@ -62,6 +102,7 @@
         "autoprefixer": "10.4.7",
         "chroma-js": "2.4.2",
         "electron": "^33.2.0",
+        "electron-builder": "^25.1.8",
         "eslint": "8.16.0",
         "eslint-plugin-import": "2.26.0",
         "eslint-plugin-jsdoc": "39.3.2",

@@ -1,28 +1,54 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
-const url = require("url");
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
 
 let win;
+
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600 });
-    // load the dist folder from Angular
-    win.loadURL(
-        url.format({
-            pathname: path.join(__dirname, "./dist/fuse/index.html"),
-            protocol: "file:",
-            slashes: true
-        })
-    );
-    // The following is optional and will open the DevTools:
-    // win.webContents.openDevTools()
-    win.on("closed", () => {
+    // Создаем окно Electron
+    win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            webSecurity: false // Отключаем политику безопасности для файлов (не рекомендуется для production)
+        }
+    });
+
+    // Загружаем локальные файлы из папки dist
+    win.loadFile(path.join(__dirname, 'dist', 'fuse', 'index.html'));
+
+    // Обработка неизвестных путей
+    win.webContents.on('did-fail-load', () => {
+        win.loadFile(path.join(__dirname, 'dist', 'fuse', 'index.html'));
+    });
+
+    // Слушаем закрытие окна
+    win.on('closed', () => {
         win = null;
     });
 }
-app.on("ready", createWindow);
-// on macOS, closing the window doesn't quit the app
-app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
+
+app.whenReady().then(() => {
+    createWindow();
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
+});
+
+// Закрытие приложения при закрытии всех окон на всех платформах
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
         app.quit();
+    }
+});
+
+// Для macOS: при повторном открытии приложения откроется новое окно
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
     }
 });

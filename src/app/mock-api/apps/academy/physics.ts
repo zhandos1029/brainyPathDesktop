@@ -13,7 +13,7 @@ export const physicsCourseContent = `
 </h3>
 <figure>
     <img
-        src="../../../../assets/images/slides/physics/photo_2024-11-01_11-56-51.jpg"
+        src="assets/images/slides/physics/photo_2024-11-01_11-57-02.jpg"
         alt="">
 </figure>
 `;
@@ -40,7 +40,7 @@ export const physics2CourseContent = `
 </h3>
 <figure>
     <img
-        src="../../../../assets/images/slides/physics/photo_2024-11-01_11-56-58.jpg"
+        src="assets/images/slides/physics/photo_2024-11-01_11-56-58.jpg"
         alt="">
 </figure>
 `;
@@ -77,7 +77,7 @@ F
 </h3>
 <figure>
     <img
-        src="../../../../assets/images/slides/physics/photo_2024-11-01_11-57-02.jpg"
+        src="assets/images/slides/physics/photo_2024-11-01_11-57-02.jpg"
         alt="">
 </figure>
 `;

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector       : 'academy',
@@ -8,16 +8,16 @@ import {Router} from "@angular/router";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AcademyComponent implements OnInit {
-    constructor() {}
+    subject: string;
+    grade: number;
+
+    constructor(private route: ActivatedRoute) {}
 
     ngOnInit(): void {
-        this.refreshPageOnce();
-    }
-
-    refreshPageOnce(): void {
-        if (!sessionStorage.getItem('hasRefreshed')) {
-            sessionStorage.setItem('hasRefreshed', 'true');
-            location.reload();
-        }
+        this.route.params.subscribe(params => {
+            this.subject = params['subject'];
+            this.grade = +params['grade'];
+        });
     }
 }
+
