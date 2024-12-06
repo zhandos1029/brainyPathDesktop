@@ -63,13 +63,7 @@ export class SettingComponent implements OnInit {
       language: ['kazakh']
     });
 
-    // Create the form
-    this.securityForm = this._formBuilder.group({
-      currentPassword  : [''],
-      newPassword      : [''],
-      twoStep          : [true],
-      askPasswordChange: [false]
-    });
+    this.accountForm.disable();
 
     // Setup available panels
     this.panels = [
@@ -78,12 +72,6 @@ export class SettingComponent implements OnInit {
         icon       : 'heroicons_outline:user-circle',
         title      : this.currentLanguage === 'ru' ? 'Аккаунт' : 'Аккаунт' ,
         description: this.currentLanguage === 'ru' ?  'Управляйте своим публичным профилем и личной информацией' : 'Қоғамдық профиліңізді және жеке ақпаратыңызды басқарыңыз'
-      },
-      {
-        id         : 'security',
-        icon       : 'heroicons_outline:lock-closed',
-        title      : this.currentLanguage === 'ru' ?  'Защита' : 'Қорғау',
-        description: this.currentLanguage === 'ru' ?  'Управление паролями и предпочтениями двухэтапной проверки' : 'Құпия сөздерді және екі сатылы растау теңшелімдерін басқарыңыз'
       }
     ];
 

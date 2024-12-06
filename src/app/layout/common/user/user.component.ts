@@ -20,6 +20,7 @@ export class UserComponent implements OnInit, OnDestroy
 
     @Input() showAvatar: boolean = true;
     user: User;
+    role: string = localStorage.getItem('role') ?? '';
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 

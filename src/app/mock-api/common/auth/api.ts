@@ -2,253 +2,86 @@ import { Injectable } from '@angular/core';
 import Base64 from 'crypto-js/enc-base64';
 import HmacSHA256 from 'crypto-js/hmac-sha256';
 import Utf8 from 'crypto-js/enc-utf8';
-import { cloneDeep } from 'lodash-es';
 import { FuseMockApiService } from '../../../../@fuse/lib/mock-api';
 import { user as userData } from '../user/data';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthMockApi
-{
-    private readonly _secret: any;
-    private _user: any = userData;
+export class AuthMockApi {
+    private readonly _secret = 'YOUR_SECRET_KEY';
+    private _users: any = userData;
 
-    /**
-     * Constructor
-     */
-    constructor(private _fuseMockApiService: FuseMockApiService)
-    {
-        // Set the mock-api
-        this._secret = 'YOUR_VERY_CONFIDENTIAL_SECRET_FOR_SIGNING_JWT_TOKENS!!!';
-
-        // Register Mock API handlers
+    constructor(private _fuseMockApiService: FuseMockApiService) {
         this.registerHandlers();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
+    registerHandlers(): void {
+        this._fuseMockApiService.onPost('api/auth/sign-in', 1500).reply(({ request }) => {
+            const { email, password } = request.body;
+            const user = this._users.find(u => u.email === email && u.password === password);
 
-    /**
-     * Register Mock API handlers
-     */
-    registerHandlers(): void
-    {
-        // -----------------------------------------------------------------------------------------------------
-        // @ Forgot password - POST
-        // -----------------------------------------------------------------------------------------------------
-        this._fuseMockApiService
-            .onPost('api/auth/forgot-password', 1000)
-            .reply(() =>
-                [
-                    200,
-                    true
-                ]
-            );
-
-        // -----------------------------------------------------------------------------------------------------
-        // @ Reset password - POST
-        // -----------------------------------------------------------------------------------------------------
-        this._fuseMockApiService
-            .onPost('api/auth/reset-password', 1000)
-            .reply(() =>
-                [
-                    200,
-                    true
-                ]
-            );
-
-        // -----------------------------------------------------------------------------------------------------
-        // @ Sign in - POST
-        // -----------------------------------------------------------------------------------------------------
-        this._fuseMockApiService
-            .onPost('api/auth/sign-in', 1500)
-            .reply(({request}) => {
-
-                // Sign in successful
-                if ( request.body.email === 'BrainyPath@company.com' && request.body.password === 'admin' )
-                {
-                    return [
-                        200,
-                        {
-                            user       : cloneDeep(this._user),
-                            accessToken: this._generateJWTToken(),
-                            tokenType  : 'bearer'
-                        }
-                    ];
-                }
-
-                // Invalid credentials
+            if (user) {
                 return [
-                    404,
-                    false
-                ];
-            });
-
-        // -----------------------------------------------------------------------------------------------------
-        // @ Sign in using the access token - POST
-        // -----------------------------------------------------------------------------------------------------
-        this._fuseMockApiService
-            .onPost('api/auth/sign-in-with-token')
-            .reply(({request}) => {
-
-                // Get the access token
-                const accessToken = request.body.accessToken;
-
-                // Verify the token
-                if ( this._verifyJWTToken(accessToken) )
-                {
-                    return [
-                        200,
-                        {
-                            user       : cloneDeep(this._user),
-                            accessToken: this._generateJWTToken(),
-                            tokenType  : 'bearer'
-                        }
-                    ];
-                }
-
-                // Invalid token
-                return [
-                    401,
+                    200,
                     {
-                        error: 'Invalid token'
+                        user: { email: user.email, role: user.role },
+                        accessToken: this._generateJWTToken(user),
+                        tokenType: 'bearer'
                     }
                 ];
-            });
+            }
 
-        // -----------------------------------------------------------------------------------------------------
-        // @ Sign up - POST
-        // -----------------------------------------------------------------------------------------------------
-        this._fuseMockApiService
-            .onPost('api/auth/sign-up', 1500)
-            .reply(() =>
+            return [404, { error: 'Invalid credentials' }];
+        });
 
-                // Simply return true
-                [
-                    200,
-                    true
-                ]
-            );
+        this._fuseMockApiService.onPost('api/auth/sign-in-with-token').reply(({ request }) => {
+            const token = request.body.accessToken;
 
-        // -----------------------------------------------------------------------------------------------------
-        // @ Unlock session - POST
-        // -----------------------------------------------------------------------------------------------------
-        this._fuseMockApiService
-            .onPost('api/auth/unlock-session', 1500)
-            .reply(({request}) => {
+            if (this._verifyJWTToken(token)) {
+                const user = this._decodeJWT(token);
+                return [200, {
+                    user: { email: user.email, role: user.role },
+                    accessToken: this._generateJWTToken(user),
+                    tokenType: 'bearer'
+                }];
+            }
 
-                // Sign in successful
-                if ( request.body.email === 'BrainyPath@company.com' && request.body.password === 'admin' )
-                {
-                    return [
-                        200,
-                        {
-                            user       : cloneDeep(this._user),
-                            accessToken: this._generateJWTToken(),
-                            tokenType  : 'bearer'
-                        }
-                    ];
-                }
-
-                // Invalid credentials
-                return [
-                    404,
-                    false
-                ];
-            });
+            return [401, { error: 'Invalid token' }];
+        });
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Private methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Return base64 encoded version of the given string
-     *
-     * @param source
-     * @private
-     */
-    private _base64url(source: any): string
-    {
-        // Encode in classical base64
-        let encodedSource = Base64.stringify(source);
-
-        // Remove padding equal characters
-        encodedSource = encodedSource.replace(/=+$/, '');
-
-        // Replace characters according to base64url specifications
-        encodedSource = encodedSource.replace(/\+/g, '-');
-        encodedSource = encodedSource.replace(/\//g, '_');
-
-        // Return the base64 encoded string
-        return encodedSource;
-    }
-
-    /**
-     * Generates a JWT token using CryptoJS library.
-     *
-     * This generator is for mocking purposes only and it is NOT
-     * safe to use it in production frontend applications!
-     *
-     * @private
-     */
-    private _generateJWTToken(): string
-    {
-        // Define token header
-        const header = {
-            alg: 'HS256',
-            typ: 'JWT'
-        };
-
-        // Calculate the issued at and expiration dates
-        const date = new Date();
-        const iat = Math.floor(date.getTime() / 1000);
-        const exp = Math.floor((date.setDate(date.getDate() + 7)) / 1000);
-
-        // Define token payload
+    private _generateJWTToken(user: any): string {
+        const header = { alg: 'HS256', typ: 'JWT' };
         const payload = {
-            iat: iat,
-            iss: 'Fuse',
-            exp: exp
+            iat: Math.floor(Date.now() / 1000),
+            exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60,
+            email: user.email,
+            role: user.role
         };
 
-        // Stringify and encode the header
-        const stringifiedHeader = Utf8.parse(JSON.stringify(header));
-        const encodedHeader = this._base64url(stringifiedHeader);
+        const headerBase64 = this._base64url(Utf8.parse(JSON.stringify(header)));
+        const payloadBase64 = this._base64url(Utf8.parse(JSON.stringify(payload)));
+        const signature = this._base64url(HmacSHA256(`${headerBase64}.${payloadBase64}`, this._secret));
 
-        // Stringify and encode the payload
-        const stringifiedPayload = Utf8.parse(JSON.stringify(payload));
-        const encodedPayload = this._base64url(stringifiedPayload);
-
-        // Sign the encoded header and mock-api
-        let signature: any = encodedHeader + '.' + encodedPayload;
-        signature = HmacSHA256(signature, this._secret);
-        signature = this._base64url(signature);
-
-        // Build and return the token
-        return encodedHeader + '.' + encodedPayload + '.' + signature;
+        return `${headerBase64}.${payloadBase64}.${signature}`;
     }
 
-    /**
-     * Verify the given token
-     *
-     * @param token
-     * @private
-     */
-    private _verifyJWTToken(token: string): boolean
-    {
-        // Split the token into parts
+    private _verifyJWTToken(token: string): boolean {
         const parts = token.split('.');
-        const header = parts[0];
-        const payload = parts[1];
-        const signature = parts[2];
+        if (parts.length !== 3) return false;
 
-        // Re-sign and encode the header and payload using the secret
-        const signatureCheck = this._base64url(HmacSHA256(header + '.' + payload, this._secret));
+        const signature = this._base64url(HmacSHA256(`${parts[0]}.${parts[1]}`, this._secret));
+        return signature === parts[2];
+    }
 
-        // Verify that the resulting signature is valid
-        return (signature === signatureCheck);
+    private _decodeJWT(token: string): any {
+        const payload = token.split('.')[1];
+        return JSON.parse(Utf8.stringify(Base64.parse(payload)));
+    }
+
+    private _base64url(source: any): string {
+        let encodedSource = Base64.stringify(source);
+        return encodedSource.replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
     }
 }

@@ -1,7 +1,7 @@
 {
-    "name": "brainyPathDesktop",
-    "description": "Desktop application for BrainyPath",
-    "author": "brainyPathDesktop",
+    "name": "OiOrda",
+    "description": "Desktop application for OiOrda",
+    "author": "OiOrda",
     "version": "15.0.0",
     "main": "main.js",
     "private": true,
@@ -18,8 +18,8 @@
         "dist:linux": "npm run dist:electron -- --linux"
     },
     "build": {
-        "appId": "brainyPathDesktop",
-        "productName": "brainyPathDesktop",
+        "appId": "OiOrda",
+        "productName": "OiOrda",
         "files": [
             "dist/",
             "main.js"

@@ -1,8 +1,20 @@
-/* eslint-disable */
-export const user = {
-    id    : 'cfaad35d-07a3-4447-a6c3-d8c3d54fd5df',
-    name  : 'BrainyPath',
-    email : 'BrainyPath@company.com',
-    avatar: '',
-    status: 'online'
-};
+export const user = [
+    {
+        id    : 'admin',
+        name  : 'OiOrda',
+        email : 'admin123',
+        password: 'adminpassword',
+        avatar: '',
+        status: 'online',
+        role  : 'admin'
+    },
+    {
+        id    : 'physics',
+        name  : 'Teacher physics',
+        email : 'physics123',
+        password: 'physicspassword',
+        avatar: '',
+        status: 'online',
+        role  : 'physics'
+    }
+];

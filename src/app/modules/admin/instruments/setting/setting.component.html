@@ -66,15 +66,15 @@
                                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                                 <mat-label>{{t('name')}}</mat-label>
                                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
-                                                <input [formControlName]="'name'" matInput>
+                                                <input [formControlName]="'name'" matInput disabled>
                                             </mat-form-field>
                                         </div>
                                         <!-- Username -->
                                         <div class="sm:col-span-4">
                                             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                                                 <mat-label>{{t('username')}}</mat-label>
-                                                <div class="text-secondary" matPrefix>brainyPath/</div>
-                                                <input [formControlName]="'username'" matInput>
+                                                <div class="text-secondary" matPrefix>OiOrda/</div>
+                                                <input [formControlName]="'username'" matInput disabled>
                                             </mat-form-field>
                                         </div>
                                         <!-- Title -->
@@ -82,7 +82,7 @@
                                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                                 <mat-label>{{t('job_title')}}</mat-label>
                                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:briefcase'" matPrefix></mat-icon>
-                                                <input [formControlName]="'title'" matInput>
+                                                <input [formControlName]="'title'" matInput disabled>
                                             </mat-form-field>
                                         </div>
                                         <!-- Company -->
@@ -90,108 +90,9 @@
                                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                                 <mat-label>{{t('company')}}</mat-label>
                                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:office-building'" matPrefix></mat-icon>
-                                                <input [formControlName]="'company'" matInput>
+                                                <input [formControlName]="'company'" matInput disabled>
                                             </mat-form-field>
                                         </div>
-                                        <!-- About -->
-                                        <div class="sm:col-span-4">
-                                            <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('about_me')}}</mat-label>
-                                                <textarea matInput [formControlName]="'about'" cdkTextareaAutosize [cdkAutosizeMinRows]="5"></textarea>
-                                            </mat-form-field>
-                                            <div class="mt-1 text-md text-hint">{{t('profile_hint')}}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="my-10 border-t"></div>
-
-                                    <div class="w-full">
-                                        <div class="text-xl">{{t('personal_information')}}</div>
-                                        <div class="text-secondary">{{t('contact_info_description')}}</div>
-                                    </div>
-                                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-                                        <!-- Email -->
-                                        <div class="sm:col-span-2">
-                                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('email')}}</mat-label>
-                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'" matPrefix></mat-icon>
-                                                <input [formControlName]="'email'" matInput>
-                                            </mat-form-field>
-                                        </div>
-                                        <!-- Phone -->
-                                        <div class="sm:col-span-2">
-                                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('phone')}}</mat-label>
-                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
-                                                <input [formControlName]="'phone'" matInput>
-                                            </mat-form-field>
-                                        </div>
-                                        <!-- Country -->
-                                        <div class="sm:col-span-2">
-                                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('country')}}</mat-label>
-                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:location-marker'" matPrefix></mat-icon>
-                                                <mat-select [formControlName]="'country'">
-                                                    <mat-option [value]="'kz'">{{t('kazakhstan')}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                        <!-- Language -->
-                                        <div class="sm:col-span-2">
-                                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('language')}}</mat-label>
-                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:globe-alt'" matPrefix></mat-icon>
-                                                <mat-select [formControlName]="'language'">
-                                                    <mat-option [value]="'english'">{{t('english')}}</mat-option>
-                                                    <mat-option [value]="'russian'">{{t('russiann')}}</mat-option>
-                                                    <mat-option [value]="'kazakh'">{{t('kazakhn')}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-center mt-10 space-x-2">
-                                        <button class="px-6" mat-raised-button color="primary" [disabled]="accountForm.invalid">
-                                            {{t('save')}}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </ng-container>
-                        <!-- Security -->
-                        <ng-container *ngSwitchCase="'security'">
-                            <div class="w-full max-w-3xl">
-                                <form [formGroup]="securityForm">
-                                    <div class="w-full">
-                                        <div class="text-xl">{{t('change_password')}}</div>
-                                    </div>
-                                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-                                        <!-- Current Password -->
-                                        <div class="sm:col-span-4">
-                                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('current_password')}}</mat-label>
-                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:key'" matPrefix></mat-icon>
-                                                <input [formControlName]="'currentPassword'" type="password" matInput>
-                                            </mat-form-field>
-                                        </div>
-                                        <!-- New Password -->
-                                        <div class="sm:col-span-4">
-                                            <mat-form-field class="fuse-mat-no-subscript w-full">
-                                                <mat-label>{{t('new_password')}}</mat-label>
-                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:key'" matPrefix></mat-icon>
-                                                <input [formControlName]="'newPassword'" type="password" matInput>
-                                            </mat-form-field>
-                                            <div class="mt-1 text-md text-hint">{{t('password_hint')}}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="my-10 border-t"></div>
-
-                                    <div class="flex items-center justify-end">
-                                        <button class="px-6" mat-raised-button color="primary" [disabled]="securityForm.invalid">
-                                            {{t('save')}}
-                                        </button>
-                                        <button class="px-6" mat-stroked-button color="primary">{{t('cancel')}}</button>
                                     </div>
                                 </form>
                             </div>

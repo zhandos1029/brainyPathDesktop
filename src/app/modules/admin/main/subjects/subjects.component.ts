@@ -12,7 +12,6 @@ import {Router} from "@angular/router";
 })
 export class SubjectsComponent implements OnInit {
     organizationControlCards: OrganizationControlCard[] = OrganizationControlCards
-
     constructor(private router: Router) {
     }
 

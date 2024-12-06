@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { OrganizationControlCard } from "./organization-control-cards";
-import {TranslocoService} from "@ngneat/transloco";
+import { TranslocoService } from "@ngneat/transloco";
 
 @Component({
     selector: 'app-organization-cards',
@@ -10,11 +10,15 @@ import {TranslocoService} from "@ngneat/transloco";
 })
 export class OrganizationCardsComponent implements OnInit {
     @Input() organizationControlCards: OrganizationControlCard[];
+    filteredCards: OrganizationControlCard[] = [];
     selectedRoute: string;
     isModalOpen = false;
     minGrade: number = 1;
     maxGrade: number = 11;
     currentLanguage: string;
+
+    // Получаем роль из localStorage
+    role: string = localStorage.getItem('role') ?? '';
 
     constructor(
         private router: Router,
@@ -27,6 +31,18 @@ export class OrganizationCardsComponent implements OnInit {
         this._translocoService.langChanges$.subscribe((lang) => {
             this.currentLanguage = lang;
         });
+
+        this.filterCards();
+    }
+
+    filterCards(): void {
+        if (this.role === 'admin') {
+            this.filteredCards = this.organizationControlCards;
+        } else {
+            this.filteredCards = this.organizationControlCards.filter(card =>
+                card.route.includes(this.role.toLowerCase())
+            );
+        }
     }
 
     openModal(card: OrganizationControlCard): void {

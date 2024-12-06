@@ -31,42 +31,42 @@ export const defaultNavigation: FuseNavigationItem[] = [
             }
         ]
     },
-    {
-        id      : 'subjects',
-        title   : 'Предметы',
-        type    : 'group',
-        icon    : 'heroicons_outline:home',
-        children: [
-            {
-                id   : 'subjects.physics',
-                title: 'Физика',
-                type : 'basic',
-                icon : 'heroicons_outline:chip',
-                link : '/subjects/physics'
-            },
-            {
-                id   : 'subjects.chemistry',
-                title: 'Химия',
-                type : 'basic',
-                icon : 'heroicons_outline:beaker',
-                link : '/subjects/chemistry'
-            },
-            {
-                id   : 'subjects.biology',
-                title: 'Биология',
-                type : 'basic',
-                icon : 'heroicons_outline:finger-print',
-                link : '/subjects/biology'
-            },
-            {
-                id   : 'subjects.geography',
-                title: 'География',
-                type : 'basic',
-                icon : 'heroicons_outline:globe',
-                link : '/subjects/geography'
-            }
-        ]
-    },
+    // {
+    //     id      : 'subjects',
+    //     title   : 'Предметы',
+    //     type    : 'group',
+    //     icon    : 'heroicons_outline:home',
+    //     children: [
+    //         {
+    //             id   : 'subjects.physics',
+    //             title: 'Физика',
+    //             type : 'basic',
+    //             icon : 'heroicons_outline:chip',
+    //             link : '/subjects/physics'
+    //         },
+    //         {
+    //             id   : 'subjects.chemistry',
+    //             title: 'Химия',
+    //             type : 'basic',
+    //             icon : 'heroicons_outline:beaker',
+    //             link : '/subjects/chemistry'
+    //         },
+    //         {
+    //             id   : 'subjects.biology',
+    //             title: 'Биология',
+    //             type : 'basic',
+    //             icon : 'heroicons_outline:finger-print',
+    //             link : '/subjects/biology'
+    //         },
+    //         {
+    //             id   : 'subjects.geography',
+    //             title: 'География',
+    //             type : 'basic',
+    //             icon : 'heroicons_outline:globe',
+    //             link : '/subjects/geography'
+    //         }
+    //     ]
+    // },
     {
         id      : 'instruments',
         title   : 'Инструменты',
