@@ -39,8 +39,23 @@ export class OrganizationCardsComponent implements OnInit {
         if (this.role === 'admin') {
             this.filteredCards = this.organizationControlCards;
         } else {
+            const roleSubjectsMap: { [key: string]: string[] } = {
+                kazakh: ['kazakh_language', 'kazakh_literature'],
+                russian: ['russian_language', 'russian_literature'],
+                physics: ['physics'],
+                chemistry: ['chemistry'],
+                biology: ['biology'],
+                geography: ['geography'],
+                algebra: ['algebra'],
+                geometry: ['geometry'],
+                english: ['english'],
+                world_history: ['world_history'],
+                kazakhstan_history: ['kazakhstan_history']
+            };
+
+            const associatedSubjects = roleSubjectsMap[this.role] || [];
             this.filteredCards = this.organizationControlCards.filter(card =>
-                card.route.includes(this.role.toLowerCase())
+                associatedSubjects.some(subject => card.route.includes(subject))
             );
         }
     }

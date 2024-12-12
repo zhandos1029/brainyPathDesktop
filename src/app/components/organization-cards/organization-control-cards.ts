@@ -141,4 +141,3 @@ export const OrganizationControlCards: OrganizationControlCard[] = [
         maxGrade: 11
     }
 ];
-
